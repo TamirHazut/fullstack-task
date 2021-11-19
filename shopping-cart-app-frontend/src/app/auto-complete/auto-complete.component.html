@@ -1,0 +1,13 @@
+<div class="col-sm-8 col-md-4 text-right">  
+    <div class="form-group">  
+        <div class="input-group">  
+            <input class="form-control" *ngIf="flag" type="text" [(ngModel)]="ItemName" (keyup)="searchItems(ItemName)" />  
+            <input class="form-control" [(ngModel)]="ItemName" disabled *ngIf="!flag" type="text" />  
+        </div>          
+    </div>  
+    <div class="search-result" *ngIf="flag">  
+        <ul>  
+            <li *ngFor="let item of items | async">{{item.id}}: {{item.name}}</li>             
+        </ul>
+    </div>
+</div>  
