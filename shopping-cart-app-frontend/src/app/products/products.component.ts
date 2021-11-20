@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Product } from '../models/product.model';
+import { ProductCartService } from '../services/product-cart.service';
 
 @Component({
   selector: 'app-products',
@@ -7,31 +9,40 @@ import { Product } from '../models/product.model';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
+  @Input() public endPoint: string | undefined;
+  public products: Product[] | undefined;  
 
-  products: Product[] = [];
-
-  constructor() {
-    this.products = [
-      new Product('43900', 'Duracell - AAA Batteries (4-Pack)', 5.49, 'http://img.bbystatic.com/BestBuy_US/images/products/4390/43900_sa.jpg'),
-      new Product('48530', 'Duracell - AA 1.5V CopperTop Batteries (4-Pack)', 5.49, 'http://img.bbystatic.com/BestBuy_US/images/products/4853/48530_sa.jpg'),
-      new Product('127687', 'Duracell - AA Batteries (8-Pack)', 7.49, 'http://img.bbystatic.com/BestBuy_US/images/products/1276/127687_sa.jpg'),
-      new Product('150115', 'Energizer - MAX Batteries AA (4-Pack)', 5.49, 'http://img.bbystatic.com/BestBuy_US/images/products/1501/150115_sa.jpg'),
-      new Product('185230', 'Duracell - C Batteries (4-Pack)', 8.99, 'http://img.bbystatic.com/BestBuy_US/images/products/1852/185230_sa.jpg'),
-    ];
-   }
+  constructor(private productCartService: ProductCartService) { }
 
   ngOnInit(): void {
+    this.productCartService.endPoint = this.endPoint;
+    this.getCartProducts();
+   }
+
+  getCartProducts() {
+    this.productCartService.getCartItems()?.subscribe(items => {
+      this.products = items;
+    })
   }
 
   addProduct(product: { id: string, name: string, price: number, picture: string }): void {
-    this.products.push(new Product(product.id, product.name, product.price, product.picture));
+    // this.products.push(new Product(product.id, product.name, product.price, product.picture));
   }
 
   removeProduct(id: string) : void {
-    this.products.splice(this.products.findIndex(product => product.getID() === id), 1);
+    this.productCartService.deleteProduct(this.convertStringToJSON('id', id))?.subscribe({
+      next: res => { this.getCartProducts(); },
+      error: error => { console.log(error); }
+    });
+  }
+
+  convertStringToJSON(property:string, value: string): JSON {
+    const termJSONString = '{ "' + property + '": "' + value + '" }';
+    return JSON.parse(termJSONString);
   }
 
   findProductByID(id: string) : Product | undefined {
-    return this.products.find(product => product.getID() === id);
+    return undefined;
+    // return this.products.find(product => product.getID() === id);
   }
 }

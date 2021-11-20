@@ -1,0 +1,32 @@
+
+.tile.row {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.tile .product-picture-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.tile .product-picture-container .product-picture {
+    display: block;
+    height: 60px;
+    margin: 0;
+    border: 0;
+}
+
+.tile .product-info-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.tile .product-info-container .product-name {
+    font-size: large;
+}

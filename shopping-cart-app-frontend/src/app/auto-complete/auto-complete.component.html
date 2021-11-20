@@ -1,13 +1,25 @@
 <div class="col-sm-8 col-md-4 text-right">  
     <div class="form-group">  
-        <div class="input-group">  
-            <input class="form-control" *ngIf="flag" type="text" [(ngModel)]="ItemName" (keyup)="searchItems(ItemName)" />  
-            <input class="form-control" [(ngModel)]="ItemName" disabled *ngIf="!flag" type="text" />  
-        </div>          
+        <div class="input-group mb-3">
+            <input type="search" class="form-control py-2 border-right-0 border" aria-describedby="basic-addon2" *ngIf="flag" [(ngModel)]="ItemName" (keyup)="searchItems(ItemName)" />
+            <input class="form-control py-2 border-right-0 border" [(ngModel)]="ItemName" disabled *ngIf="!flag" type="text" /> 
+        </div>
+           
     </div>  
     <div class="search-result" *ngIf="flag">  
         <ul>  
-            <li *ngFor="let item of items | async">{{item.id}}: {{item.name}}</li>             
+            <li *ngFor="let item of items | async">
+                <a (click)="onSelectItem(item)">{{item.id}}: {{item.name}}</a>
+            </li>             
         </ul>
     </div>
 </div>  
+
+<!-- <div class="col-md-4">
+    <div class="input-group">
+        <input class="form-control py-2 border-right-0 border" type="search" value="search" id="example-search-input">
+        <span class="input-group-append">
+            <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+        </span>
+    </div>
+</div> -->

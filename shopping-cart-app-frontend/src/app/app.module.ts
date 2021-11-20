@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { APIInterceptor } from './injectables/api.interceptor';
 import { SearchService } from './services/search.service';
+import { ProductCartService } from './services/product-cart.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SearchService } from './services/search.service';
     useClass: APIInterceptor,
     multi: true,
   },
-  SearchService],
+  SearchService,
+  ProductCartService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -12,19 +12,18 @@ export class ProductComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   getName(): string {
-    return (this.product ? this.product.getName() : '');
+    return (this.product ? this.product.name : '');
   }
 
   getPrice(): number {
-    return (this.product ? this.product.getPrice() : 0);
+    return (this.product ? this.product.price : 0);
   }
 
-  getPicture(): string {
-    return (this.product ? this.product.getImagePath() : '');
+  getImgaePath(): string {
+    return (this.product ? this.product.imagePath : '');
   }
 
 }

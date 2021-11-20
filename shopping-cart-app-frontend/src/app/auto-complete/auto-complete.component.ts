@@ -49,7 +49,7 @@ export class AutoCompleteComponent implements OnInit {
     // )
 
   convertStringToJSON(term: string): JSON {
-    const termJSONString = '{ "name": "' + term + '" }';
+    const termJSONString = '{ "search": "' + term + '" }';
     return JSON.parse(termJSONString);
   }
 
