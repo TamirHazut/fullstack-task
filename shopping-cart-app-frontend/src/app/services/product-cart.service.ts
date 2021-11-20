@@ -16,6 +16,13 @@ export class ProductCartService {
         return this.http.get(this.endPoint) as Observable<Product[]>;
     }
 
+    addProduct(body: JSON) {
+        if (!this.endPoint) {
+            return undefined;
+        }  
+        return this.http.put(this.endPoint, body);
+    }
+
     deleteProduct(body: JSON) {
         if (!this.endPoint) {
             return undefined;
@@ -28,6 +35,4 @@ export class ProductCartService {
             };
         return this.http.delete(this.endPoint, options);
     }
-
-
 }

@@ -25,8 +25,12 @@ export class ProductsComponent implements OnInit {
     })
   }
 
-  addProduct(product: { id: string, name: string, price: number, picture: string }): void {
-    // this.products.push(new Product(product.id, product.name, product.price, product.picture));
+  addProduct = (itemObj: any): void => {
+    const product = itemObj as Product;
+    this.productCartService.addProduct(this.convertStringToJSON('id', product.id))?.subscribe({
+      next: res => { this.getCartProducts(); },
+      error: error => { console.log(error); }
+    })
   }
 
   removeProduct(id: string) : void {
@@ -39,10 +43,5 @@ export class ProductsComponent implements OnInit {
   convertStringToJSON(property:string, value: string): JSON {
     const termJSONString = '{ "' + property + '": "' + value + '" }';
     return JSON.parse(termJSONString);
-  }
-
-  findProductByID(id: string) : Product | undefined {
-    return undefined;
-    // return this.products.find(product => product.getID() === id);
   }
 }

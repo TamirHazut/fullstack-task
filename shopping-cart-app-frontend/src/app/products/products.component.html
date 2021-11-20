@@ -1,5 +1,5 @@
 <div class="shopping-cart"> 
-    <app-auto-complete class="auto-complete" endPoint="cart"></app-auto-complete>
+    <app-auto-complete class="auto-complete" endPoint="{{endPoint}}" [callbackFunction]="addProduct"></app-auto-complete>
     <table class="cart-product">
         <tr *ngFor="let product of products">
             <td><app-product class="product" [product]="product"></app-product></td>

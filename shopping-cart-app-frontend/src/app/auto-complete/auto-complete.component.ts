@@ -10,6 +10,7 @@ import { SearchService } from '../services/search.service';
 })
 export class AutoCompleteComponent implements OnInit {
   @Input() public endPoint: string | undefined;
+  @Input() callbackFunction: ((args: any) => void) | undefined;
   public flag: boolean = true;
   public items: Observable<any[]> | undefined;  
   private searchTerms = new Subject<string>();  
@@ -19,34 +20,19 @@ export class AutoCompleteComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchService.endPoint = this.endPoint;
-    this.searchTerms.pipe(
-      debounceTime(300), // wait for 300ms pause in events
-      distinctUntilChanged(), // ignore if next search term is same as previous 
-      switchMap(async (term) => term // switch to new observable each time 
-      ? this.searchService.search(this.convertStringToJSON(term)) // return the http search observable  
-      : of<any[]>([])), // or the observable of empty heroes if no search term  
-      catchError(error => {
-        console.log(error); // temp error handling  
-        return of<any[]>([]);
-      })).subscribe(items => this.items = items as Observable<any[]>);
-    }
-
-    // this.searchTerms
-    // .subscribe(
-    //   term => {
-    //     if (term) {
-    //       const termJSONString = '{ "name": "' + term + '" }';
-    //       const termJSONObj = JSON.parse(termJSONString);
-    //       var postRes = this.searchService.search(termJSONObj);
-    //       if (postRes) {
-    //         postRes.subscribe(data => {
-    //           this.items = data as Observable<any[]>;
-    //           console.log(this.items);
-    //         })
-    //       }
-    //     }
-    //   }
-    // )
+    this.searchTerms
+      .pipe(
+        debounceTime(300), // wait for 300ms pause in events
+        distinctUntilChanged(), // ignore if next search term is same as previous 
+        switchMap(async (term) => term // switch to new observable each time 
+        ? this.searchService.search(this.convertStringToJSON(term)) // return the http search observable  
+        : of<any[]>([])), // or the observable of empty heroes if no search term  
+        catchError(error => {
+          console.log(error); // temp error handling  
+          return of<any[]>([]);
+        })
+      ).subscribe(items => this.items = items as Observable<any[]>);
+  }
 
   convertStringToJSON(term: string): JSON {
     const termJSONString = '{ "search": "' + term + '" }';
@@ -58,7 +44,13 @@ export class AutoCompleteComponent implements OnInit {
     this.searchTerms.next(term);
   }
 
-  onSelectItem(ItemObj: any): void {
-    console.log(ItemObj);
+  onSelectItem(ItemObj: any): any {
+    if (this.callbackFunction && ItemObj.id) {
+      this.ItemName = ItemObj.name;
+      this.flag = false;
+      this.callbackFunction(ItemObj);
+    } else {
+      return false;
+    }
   }
 }
