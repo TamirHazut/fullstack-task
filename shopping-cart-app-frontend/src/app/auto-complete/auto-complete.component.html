@@ -1,14 +1,11 @@
-<div class="col-sm-8 col-md-4 text-right">  
+<div class="col-sm-8 col-md-4 auto-complete-main">  
     <div class="form-group">  
-        <div class="input-group mb-3">
-            <input type="search" class="form-control py-2 border-right-0 border" aria-describedby="basic-addon2" [(ngModel)]="ItemName" (keyup)="searchItems(ItemName)" />
+        <div class="input-group mb-3 has-search">
+            <span class="fa fa-search form-control-feedback"></span>
+            <input type="text" class="form-control" [(ngModel)]="ItemName" (keyup)="onKeyPress($event)" />
         </div>     
     </div>  
-    <div class="search-result" *ngIf="flag">  
-        <ul class="list-group">  
-            <li class="list-group-item list-group-item-action" *ngFor="let item of items | async">
-                <a (click)="onSelectItem(item)">{{item.id}}: {{item.name}}</a>
-            </li>             
-        </ul>
+    <div class="combobox-options" *ngIf="listShown">
+        <list-item class="list-group-item" *ngFor="let item of items | async;let i = index" (click)="onSelectItem(item)" (mouseenter)="onMouseEntered(i)" [ngClass]="{'selected': i===selectedIndex}">{{item.id}}: {{item.name}}</list-item>
     </div>
 </div>  
